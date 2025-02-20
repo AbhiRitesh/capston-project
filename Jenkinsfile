@@ -1,37 +1,25 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = 'capstonproject'
-    }
-
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                script {
-                    // Build the Docker image
-                    docker.build("${DOCKER_IMAGE}")
-                }
+                // Checkout the code from the Git repository
+                git branch: 'main', url: 'https://github.com/AbhiRitesh/capston-project.git'
             }
         }
 
-        stage('Test') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    // Run unit tests inside a Docker container
-                    docker.image("${DOCKER_IMAGE}").inside {
-                        sh 'pytest'
-                    }
-                }
+                // Install Python dependencies
+                sh 'pip install -r requirements.txt'
             }
         }
 
-        stage('Deploy') {
+        stage('Run Tests') {
             steps {
-                script {
-                    // Run the Docker container
-                    sh "docker run -d -p 5000:5000 ${DOCKER_IMAGE}"
-                }
+                // Run unit tests using pytest
+                sh 'pytest'
             }
         }
     }
