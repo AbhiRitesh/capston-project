@@ -1,7 +1,7 @@
+import base64
 import pytest
 from app import create_app, db
 from app.models import User
-from app.auth import auth
 
 @pytest.fixture
 def client():
@@ -19,22 +19,22 @@ def client():
         db.drop_all()
 
 def test_add_user(client):
-    # Add authentication credentials
-    auth = ('admin', 'admin123')  # Replace with your username and password
+    # Encode authentication credentials
+    auth = base64.b64encode(b'admin:admin123').decode('utf-8')  # Replace with your username and password
     response = client.post(
         '/users',
         json={'username': 'test', 'email': 'test@example.com'},
-        headers={'Authorization': 'Basic ' + auth}
+        headers={'Authorization': f'Basic {auth}'}
     )
     assert response.status_code == 201
 
 def test_get_users(client):
-    # Add authentication credentials
-    auth = ('admin', 'admin123')  # Replace with your username and password
+    # Encode authentication credentials
+    auth = base64.b64encode(b'admin:admin123').decode('utf-8')  # Replace with your username and password
     client.post(
         '/users',
         json={'username': 'test', 'email': 'test@example.com'},
-        headers={'Authorization': 'Basic ' + auth}
+        headers={'Authorization': f'Basic {auth}'}
     )
-    response = client.get('/users', headers={'Authorization': 'Basic ' + auth})
+    response = client.get('/users', headers={'Authorization': f'Basic {auth}'})
     assert response.status_code == 200
