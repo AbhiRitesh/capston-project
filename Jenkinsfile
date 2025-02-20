@@ -11,15 +11,15 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Install Python dependencies
-                sh 'pip install -r requirements.txt'
+                // Install Python dependencies using pip
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
                 // Run unit tests using pytest
-                sh 'pytest'
+                bat 'pytest'
             }
         }
     }
