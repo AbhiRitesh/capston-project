@@ -1,6 +1,7 @@
 import pytest
 from app import create_app, db
-from flask_httpauth import HTTPBasicAuth
+from app.models import User
+from app.auth import auth
 
 @pytest.fixture
 def client():
